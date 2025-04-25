@@ -5394,13 +5394,14 @@ std::string GCode::_extrude(const ExtrusionPath &path, std::string description, 
             jerk = m_config.inner_wall_jerk.value;
         else if (m_config.infill_jerk.value > 0 && is_infill(path.role()))
             jerk = m_config.infill_jerk.value;
-        else if (m_config.top_surface_jerk.value > 0 && is_top_surface(path.role()))
+	else if (m_config.top_surface_jerk.value > 0 && is_top_surface(path.role()))
             jerk = m_config.top_surface_jerk.value;
 
         gcode += m_writer.set_jerk_xy(jerk);
     }
     // calculate extrusion length per distance unit
-    auto _mm3_per_mm = path.mm3_per_mm * double(m_curr_print->calib_mode() == CalibMode::Calib_Flow_Rate ? this->config().print_flow_ratio.value : 1);
+    // auto _mm3_per_mm = path.mm3_per_mm * double(m_curr_print->calib_mode() == CalibMode::Calib_Flow_Rate ? this->config().print_flow_ratio.value : 1);
+	auto _mm3_per_mm = path.mm3_per_mm * double(this->config().print_flow_ratio.value);
 
     // calculate extrusion length per distance unit
     if( path.role() == erTopSolidInfill )
